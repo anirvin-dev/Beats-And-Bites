@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<script>
-    const attributes = {
-      name: 'Beats & Bites',
-      fontFamily: 'Montserrat'
-    };
-  
-    document.getElementById('attributes').textContent = `Name: 
-  ${attributes.name}\nFont Family: ${attributes.fontFamily}`;
-  </script>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, 
-initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover the perfect music for your mood and food with Beats & Bites">
   <title>Beats & Bites</title>
   <link rel="stylesheet" href="css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <h1>Welcome to Beats & Bites!</h1>
-  <nav>
-    <ul>
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-  
-  <h2>Logo Attributes</h2>
-  <p id="attributes"></p>
-  <p>Beats & Bites cool project that can give you suggestions on MUSIC and FOOD!</p>
+  <div class="container">
+    <header>
+      <h1>Welcome to Beats & Bites!</h1>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    <main>
+      <div class="vinyl-container">
+        <div class="vinyl-record">
+          <div class="vinyl-center"></div>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <div class="mood-selector">
+          <h2>How are you feeling?</h2>
+          <select id="mood">
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="energetic">Energetic</option>
+            <option value="relaxed">Relaxed</option>
+            <option value="nostalgic">Nostalgic</option>
+            <option value="romantic">Romantic</option>
+            <option value="focused">Focused</option>
+            <option value="chill">Chill</option>
+          </select>
+        </div>
+        
+        <div class="food-selector">
+          <h2>What are you eating?</h2>
+          <input type="text" id="food" placeholder="Enter your food...">
+        </div>
+        
+        <button id="recommend">
+          <i class="fas fa-music"></i> Get Recommendations
+        </button>
+      </div>
+      
+      <div class="recommendation" id="recommendation">
+        <!-- Song recommendations will appear here -->
+      </div>
+    </main>
+  </div>
   <script src="js/index.js"></script>
 </body>
 </html>

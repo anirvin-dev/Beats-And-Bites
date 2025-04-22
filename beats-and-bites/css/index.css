@@ -1,45 +1,391 @@
-body {
-  font-family: 'Montserrat', sans-serif;
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #1DB954;
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --vinyl-color: #1a1a1a;
+  --vinyl-center: #1DB954;
+  --card-bg: #282828;
+  --card-hover: #383838;
+}
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 h1 {
-  color: #4567b7; /* Bluish color */
-  text-align: center;
-  background-color: #959595; /* Greyish background */
-  background-clip: text;
-  -webkit-background-clip: text; /* For Safari and Chrome */
-  -moz-background-clip: text; /* For Firefox */
-  font-size: 48px;
-  font-weight: bold;
-  letter-spacing: 2px;
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
 }
 
-h1::before {
-  content: '';
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: var(--secondary-color);
+}
+
+.vinyl-container {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
+
+.vinyl-record {
+  width: 300px;
+  height: 300px;
+  background-color: var(--vinyl-color);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  animation: spin 20s linear infinite;
+  transition: transform 0.3s ease;
+}
+
+.vinyl-center {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background-color: var(--vinyl-center);
+  border-radius: 50%;
+  border: 2px solid white;
 }
 
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.mood-selector, .food-selector {
+  width: 100%;
+  max-width: 400px;
+}
+
+select, input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--secondary-color);
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background-color: #1ed760;
+}
+
+.recommendation {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.recommendation.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.track-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.track-card:hover {
+  background-color: var(--card-hover);
+  transform: translateY(-5px);
+}
+
+.track-cover {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.track-cover img {
+  width: 100%;
+  border-radius: 4px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.play-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.track-card:hover .play-button {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.track-info {
+  padding: 0.5rem 0;
+}
+
+.track-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist, .album {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.track-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #b3b3b3;
+}
+
+.spotify-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.spotify-link:hover {
+  text-decoration: underline;
+}
+
+.loading, .no-results, .error {
+  text-align: center;
+  padding: 2rem;
+  color: #b3b3b3;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.error {
+  border: 1px solid #e74c3c;
+}
+
+.error h3 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+.error-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 4px;
+}
+
+.error-details pre {
+  font-family: monospace;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+}
+
+.loading {
+  position: relative;
+  padding: 3rem;
+}
+
+.loading:after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 1rem auto;
+  border-radius: 50%;
+  border: 3px solid var(--secondary-color);
+  border-color: var(--secondary-color) transparent var(--secondary-color) transparent;
+  animation: loading-spinner 1.2s linear infinite;
+}
+
+@keyframes loading-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
   }
   
-  nav li {
-    display: inline-block;
-    margin-right: 20px;
+  .vinyl-record {
+    width: 200px;
+    height: 200px;
   }
   
-  nav a {
-    text-decoration: none;
-    color: #337ab7;
+  h1 {
+    font-size: 2rem;
   }
   
-  nav a:hover {
-    color: #23527c;
+  .recommendations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.auth-prompt {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.auth-prompt h3 {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.spotify-auth-button {
+  background-color: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 500px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.spotify-auth-button:hover {
+  background-color: #1ed760;
+  transform: scale(1.05);
+}
+
+.spotify-auth-button i {
+  font-size: 1.2rem;
+}
+
+.message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  color: white;
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
+}
+
+.message.success {
+  background-color: var(--secondary-color);
+}
+
+.message.error {
+  background-color: #e74c3c;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }  
