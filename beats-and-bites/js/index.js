@@ -4,7 +4,108 @@ document.addEventListener('DOMContentLoaded', () => {
   const foodInput = document.getElementById('food');
   const recommendationDiv = document.getElementById('recommendation');
   const vinylRecord = document.querySelector('.vinyl-record');
+  const musicalNotesContainer = document.querySelector('.musical-notes');
   let currentAudio = null;
+
+  // Musical notes for background
+  const notes = ['♩', '♪', '♫', '♬', '𝄞', '𝄢'];
+  
+  // Create floating musical notes
+  function createNote() {
+    const note = document.createElement('div');
+    note.className = 'note';
+    note.textContent = notes[Math.floor(Math.random() * notes.length)];
+    
+    // Random starting position
+    const startX = Math.random() * window.innerWidth;
+    const endX = startX + (Math.random() - 0.5) * 200;
+    
+    // Random duration
+    const duration = Math.random() * 5 + 8; // 8-13 seconds
+    
+    // Set custom properties for animation
+    note.style.setProperty('--start-x', `${startX}px`);
+    note.style.setProperty('--end-x', `${endX}px`);
+    note.style.setProperty('--duration', `${duration}s`);
+    note.style.left = `${startX}px`;
+    
+    musicalNotesContainer.appendChild(note);
+    
+    // Remove note after animation completes
+    note.addEventListener('animationend', () => {
+      note.remove();
+    });
+  }
+
+  // Create initial set of notes
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => createNote(), i * 300);
+  }
+
+  // Continuously create new notes
+  setInterval(createNote, 2000);
+
+  // Vinyl record interaction
+  vinylRecord.addEventListener('mouseover', () => {
+    vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 8s linear infinite';
+    createNoteBurst(vinylRecord);
+  });
+
+  vinylRecord.addEventListener('mouseout', () => {
+    vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 20s linear infinite';
+  });
+
+  // Create note burst effect
+  function createNoteBurst(element) {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 8; i++) {
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = notes[Math.floor(Math.random() * notes.length)];
+      note.style.position = 'fixed';
+      note.style.left = `${centerX}px`;
+      note.style.top = `${centerY}px`;
+      note.style.animation = 'none';
+      
+      const angle = (i / 8) * Math.PI * 2;
+      const velocity = 5;
+      const vx = Math.cos(angle) * velocity;
+      const vy = Math.sin(angle) * velocity;
+      
+      document.body.appendChild(note);
+      
+      let frame = 0;
+      const animate = () => {
+        frame++;
+        const x = vx * frame;
+        const y = vy * frame + 0.5 * 0.1 * frame * frame;
+        note.style.transform = `translate(${x}px, ${y}px)`;
+        note.style.opacity = 1 - frame / 100;
+        
+        if (frame < 100) {
+          requestAnimationFrame(animate);
+        } else {
+          note.remove();
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    }
+  }
+
+  // Form interactions
+  moodSelect.addEventListener('change', () => {
+    createNoteBurst(moodSelect);
+  });
+
+  foodInput.addEventListener('input', (e) => {
+    if (e.target.value.length > 0 && e.target.value.length % 3 === 0) {
+      createNoteBurst(foodInput);
+    }
+  });
 
   recommendButton.addEventListener('click', async () => {
     const mood = moodSelect.value;
@@ -15,37 +116,42 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Show loading state
-    recommendationDiv.innerHTML = '<div class="loading">Finding the perfect beat for your next bite...</div>';
+    // Show loading state with animation
+    recommendationDiv.innerHTML = `
+      <div class="loading">
+        Finding the perfect beat for your next bite...
+        <div class="loading-animation">
+          ${notes.slice(0, 5).map(note => `<span>${note}</span>`).join('')}
+        </div>
+      </div>
+    `;
     recommendationDiv.classList.add('show');
     
-    // Animate vinyl record
-    vinylRecord.style.animation = 'none';
-    vinylRecord.offsetHeight; // Trigger reflow
-    vinylRecord.style.animation = 'spin 20s linear infinite';
+    // Create note burst effect
+    createNoteBurst(recommendButton);
     
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/recommendations?mood=${encodeURIComponent(mood)}&food=${encodeURIComponent(food)}`
-      );
-      
-      if (!response.ok) {
-        throw new Error(`Failed to get recommendations. Please try again.`);
-      }
-      
-      const tracks = await response.json();
-      
-      if (tracks.length === 0) {
-        displayNoResults();
-        return;
-      }
-      
-      displayRecommendations(tracks);
-    } catch (error) {
-      console.error('Error:', error);
-      displayError('Oops!', error.message);
-    }
+    // Animate vinyl record
+    vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 5s linear infinite';
+    
+    // For now, just show a placeholder message since we don't have Spotify API yet
+    setTimeout(() => {
+      displayPlaceholder(mood, food);
+      // Reset vinyl animation
+      vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 20s linear infinite';
+    }, 2000);
   });
+
+  function displayPlaceholder(mood, food) {
+    recommendationDiv.innerHTML = `
+      <div class="placeholder-recommendation">
+        <h3>Coming Soon!</h3>
+        <p>We're cooking up the perfect ${mood} tunes to go with your ${food}.</p>
+        <div class="placeholder-vinyl">
+          <div class="vinyl-animation"></div>
+        </div>
+      </div>
+    `;
+  }
 
   function displayRecommendations(tracks) {
     recommendationDiv.innerHTML = `
@@ -138,4 +244,46 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
   }
+
+  // Create and manage background particles
+  const particlesContainer = document.createElement('div');
+  particlesContainer.className = 'particles';
+  document.body.appendChild(particlesContainer);
+
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random size between 3 and 8 pixels
+    const size = Math.random() * 5 + 3;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    
+    // Random starting position
+    const startX = Math.random() * window.innerWidth;
+    const endX = startX + (Math.random() - 0.5) * 300;
+    
+    // Random duration between 10 and 20 seconds
+    const duration = Math.random() * 10 + 10;
+    
+    particle.style.setProperty('--start-x', `${startX}px`);
+    particle.style.setProperty('--end-x', `${endX}px`);
+    particle.style.setProperty('--duration', `${duration}s`);
+    particle.style.left = `${startX}px`;
+    
+    particlesContainer.appendChild(particle);
+    
+    // Remove particle after animation completes
+    setTimeout(() => {
+      particle.remove();
+    }, duration * 1000);
+  }
+
+  // Create initial set of particles
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => createParticle(), i * 200);
+  }
+
+  // Continuously create new particles
+  setInterval(createParticle, 1000);
 }); 

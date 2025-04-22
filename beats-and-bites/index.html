@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Discover the perfect music for your mood and food with Beats & Bites">
   <title>Beats & Bites</title>
-  <link rel="stylesheet" href="css/index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+  <!-- Musical notes background -->
+  <div class="musical-notes"></div>
+  
+  <!-- Soft gradient overlay -->
+  <div class="background-gradient"></div>
+
   <div class="container">
     <header>
-      <h1>Welcome to Beats & Bites!</h1>
+      <h1 class="glow-text">Welcome to Beats & Bites!</h1>
+      <p class="subtitle">Where Music Meets Your Mood and Comfort Food</p>
       <nav>
         <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
     </header>
@@ -25,32 +32,50 @@
     <main>
       <div class="vinyl-container">
         <div class="vinyl-record">
-          <div class="vinyl-center"></div>
+          <svg viewBox="0 0 512 512" class="vinyl-svg">
+            <defs>
+              <linearGradient id="vinyl-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#2d3436;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#636e72;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#2d3436;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <circle cx="256" cy="256" r="250" fill="url(#vinyl-gradient)" class="vinyl-base"/>
+            <circle cx="256" cy="256" r="240" fill="none" stroke="#636e72" stroke-width="1"/>
+            <circle cx="256" cy="256" r="220" fill="none" stroke="#636e72" stroke-width="1"/>
+            <circle cx="256" cy="256" r="200" fill="none" stroke="#636e72" stroke-width="1"/>
+            <circle cx="256" cy="256" r="180" fill="none" stroke="#636e72" stroke-width="1"/>
+            <circle cx="256" cy="256" r="160" fill="none" stroke="#636e72" stroke-width="1"/>
+            <circle cx="256" cy="256" r="30" fill="#dfe6e9" class="vinyl-hole glow"/>
+            <text x="256" y="256" text-anchor="middle" dominant-baseline="middle" fill="#fff" class="vinyl-label">
+              B&B
+            </text>
+          </svg>
         </div>
       </div>
       
       <div class="controls">
         <div class="mood-selector">
-          <h2>How are you feeling?</h2>
-          <select id="mood">
-            <option value="happy">Happy</option>
-            <option value="sad">Sad</option>
-            <option value="energetic">Energetic</option>
-            <option value="relaxed">Relaxed</option>
-            <option value="nostalgic">Nostalgic</option>
-            <option value="romantic">Romantic</option>
-            <option value="focused">Focused</option>
-            <option value="chill">Chill</option>
+          <h2 class="slide-in">How are you feeling today?</h2>
+          <select id="mood" class="fade-in">
+            <option value="" disabled selected>Choose your mood...</option>
+            <option value="happy">Happy & Upbeat</option>
+            <option value="relaxed">Relaxed & Cozy</option>
+            <option value="nostalgic">Nostalgic & Warm</option>
+            <option value="romantic">Romantic & Sweet</option>
+            <option value="energetic">Energetic & Fun</option>
+            <option value="focused">Focused & Calm</option>
+            <option value="chill">Chill & Mellow</option>
           </select>
         </div>
         
         <div class="food-selector">
-          <h2>What are you eating?</h2>
-          <input type="text" id="food" placeholder="Enter your food...">
+          <h2 class="slide-in">What comfort food are you enjoying?</h2>
+          <input type="text" id="food" placeholder="Enter your favorite dish..." class="fade-in">
         </div>
         
-        <button id="recommend">
-          <i class="fas fa-music"></i> Get Recommendations
+        <button id="recommend" class="pulse">
+          <i class="fas fa-music"></i> Find Your Perfect Mix
         </button>
       </div>
       
