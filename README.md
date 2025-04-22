@@ -28,9 +28,12 @@ and font family
 
 **Development Team**
 
-[Your Name]
+Anirvin Potaraju 
 
 **Contact**
 
 Feel free to reach out to us with any feedback or 
 suggestions!
+
+email me at: 
+anirvin555potaraju@gmail.com
