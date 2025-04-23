@@ -16,14 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     note.className = 'note';
     note.textContent = notes[Math.floor(Math.random() * notes.length)];
     
-    // Random starting position
     const startX = Math.random() * window.innerWidth;
     const endX = startX + (Math.random() - 0.5) * 200;
+    const duration = Math.random() * 5 + 8;
     
-    // Random duration
-    const duration = Math.random() * 5 + 8; // 8-13 seconds
-    
-    // Set custom properties for animation
     note.style.setProperty('--start-x', `${startX}px`);
     note.style.setProperty('--end-x', `${endX}px`);
     note.style.setProperty('--duration', `${duration}s`);
@@ -31,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     musicalNotesContainer.appendChild(note);
     
-    // Remove note after animation completes
     note.addEventListener('animationend', () => {
       note.remove();
     });
@@ -45,56 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Continuously create new notes
   setInterval(createNote, 2000);
 
-  // Vinyl record interaction
-  vinylRecord.addEventListener('mouseover', () => {
-    vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 8s linear infinite';
-    createNoteBurst(vinylRecord);
-  });
-
-  vinylRecord.addEventListener('mouseout', () => {
-    vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 20s linear infinite';
-  });
-
-  // Create note burst effect
-  function createNoteBurst(element) {
-    const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    for (let i = 0; i < 8; i++) {
-      const note = document.createElement('div');
-      note.className = 'note';
-      note.textContent = notes[Math.floor(Math.random() * notes.length)];
-      note.style.position = 'fixed';
-      note.style.left = `${centerX}px`;
-      note.style.top = `${centerY}px`;
-      note.style.animation = 'none';
-      
-      const angle = (i / 8) * Math.PI * 2;
-      const velocity = 5;
-      const vx = Math.cos(angle) * velocity;
-      const vy = Math.sin(angle) * velocity;
-      
-      document.body.appendChild(note);
-      
-      let frame = 0;
-      const animate = () => {
-        frame++;
-        const x = vx * frame;
-        const y = vy * frame + 0.5 * 0.1 * frame * frame;
-        note.style.transform = `translate(${x}px, ${y}px)`;
-        note.style.opacity = 1 - frame / 100;
-        
-        if (frame < 100) {
-          requestAnimationFrame(animate);
-        } else {
-          note.remove();
-        }
-      };
-      
-      requestAnimationFrame(animate);
-    }
-  }
+  // Remove vinyl hover animations, keep only basic spin
+  vinylRecord.style.animation = 'float 6s ease-in-out infinite, spin 20s linear infinite';
 
   // Form interactions
   moodSelect.addEventListener('change', () => {
